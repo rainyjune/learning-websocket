@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>WebSocket</title>
+  </head>
+  <body>
+    <form method="post" action="#">
+      <input type="text" name="message" />
+      <input type="submit" />
+    </form>
+    <script>
+      window.onload = initAll;
+      function initAll() {
+        var ws = new WebSocket('ws://localhost:8181');
+        // WebSocket connection established
+        ws.onopen = function(e) {
+          debugger;
+          console.log('Connection to server opened');
+        };
+        
+        // WebSocket message handler
+        ws.onmessage = function(event) {
+          debugger;
+          console.log(event.data);
+        };
+        
+        // WebSocket error handler
+        ws.onerror = function(e) {
+          console.log('WebSocket failure, error', e);
+        };
+        
+        var form = document.querySelector('form');
+        var input = form.querySelector('input');
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          sendMessage();
+        });
+        
+        function sendMessage() {
+          ws.send(input.value);
+        }
+      }
+    </script>
+  </body>
+</html>

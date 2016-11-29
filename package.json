@@ -1,0 +1,22 @@
+{
+  "name": "learning-websocket",
+  "version": "1.0.0",
+  "description": "Learning websocket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainyjune/learning-websocket.git"
+  },
+  "author": "rainyjune",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rainyjune/learning-websocket/issues"
+  },
+  "homepage": "https://github.com/rainyjune/learning-websocket#readme",
+  "devDependencies": {
+    "ws": "^1.1.1"
+  }
+}
