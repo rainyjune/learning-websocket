@@ -16,6 +16,7 @@ wss.on('connection', (ws) => {
       fs.writeFileSync('a.webm', Buffer.concat(chunks));
       ws.send('DONE,total:' + chunks.length);
     } else {
+      // Suppose the chunk sent by a browser returned from the MediaRecorder API.
       chunks.push(message);
       ws.send(message);
     }
