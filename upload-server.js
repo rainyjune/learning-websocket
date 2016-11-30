@@ -14,7 +14,8 @@ wss.on('connection', (ws) => {
     // When the Client sends a message 'EOF', it means the upload has been completed,  save chunks to a file.
     if (message === "EOF") {
       fs.writeFileSync('a.webm', Buffer.concat(chunks));
-      ws.send('DONE,total:' + chunks.length);
+      chunks = [];
+      ws.send('DONE');
     } else {
       // Suppose the chunk sent by a browser returned from the MediaRecorder API.
       chunks.push(message);
