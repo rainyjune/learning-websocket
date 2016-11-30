@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Upload by chunks</title>
+  </head>
+  <body>
+    <form method="post" action="#">
+      <input type="file" name="myfile" />
+      <input type="submit" />
+    </form>
+    <script>
+      window.onload = initAll;
+      function initAll() {
+        var ws = new WebSocket('ws://localhost:8181');
+        // WebSocket connection established
+        ws.onopen = function(e) {
+          console.log('Connection to server opened');
+        };
+        
+        // WebSocket message handler
+        ws.onmessage = function(event) {
+          console.log(event.data);
+          if (event.data === "DONE") {
+            return false;
+          }
+          if (currentUploadIndex < chunksLength) {
+            console.log('upload next:#', currentUploadIndex);
+            uploadFile();
+          } else {
+            // Finished, do nothing.......
+            console.log('Finished, do nothing...');
+            ws.send('EOF');
+            //ws.close();
+          }
+        };
+        
+        // WebSocket error handler
+        ws.onerror = function(e) {
+          console.log('WebSocket failure, error', e);
+        };
+        
+        var form = document.querySelector('form');
+        var file;
+        
+        var currentUploadIndex = 0;
+        var chunksLength = 0;
+        var fileSize = 0;
+        var chunkSize = 100 * 1024;
+        
+        form.addEventListener('submit', function(e) {
+          //debugger;
+          e.preventDefault();
+          file = form.querySelector('input').files[0];
+          if (!file) return false;
+          
+          fileSize = file.size;
+          chunksLength = Math.ceil(fileSize / chunkSize);
+          currentUploadIndex = 0;
+
+          uploadFile();
+        });
+        
+        function uploadFile() {
+          //debugger;
+          ws.send(file.slice(currentUploadIndex * chunkSize, Math.min((currentUploadIndex + 1) * chunkSize , fileSize)));
+          currentUploadIndex++;
+        }
+      }
+    </script>
+  </body>
+</html>
